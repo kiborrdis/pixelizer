@@ -1,0 +1,17 @@
+{
+  "files": [
+      "src/main.ts"
+  ],
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "noImplicitAny": true,
+    "target": "es6",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "esModuleInterop": true
+  }
+}
