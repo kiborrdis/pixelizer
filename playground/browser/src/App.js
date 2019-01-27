@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Pixelizer, LineTool, TwoPointRecorder, BrowserInteractionAdapter } from 'pixelize';
+import { Pixelizer, LineTool, RectangleTool, TwoPointRecorder, BrowserInteractionAdapter } from 'pixelize';
 import logo from './logo.svg';
 import './App.css';
-
-console.log('???', LineTool);
 
 class App extends Component {
   tempRef = React.createRef();
@@ -14,7 +12,7 @@ class App extends Component {
     this.pixelizer = new Pixelizer(new BrowserInteractionAdapter());
     this.pixelizer.setConfig({
       recorderCreator: (...args) => new TwoPointRecorder(...args),
-      tool: new LineTool(),
+      tool: new RectangleTool(),
     })
   }
 
