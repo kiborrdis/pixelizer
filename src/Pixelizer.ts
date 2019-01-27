@@ -7,12 +7,9 @@ import { InteractionConnector } from './InteractionConnector';
 import { InteractionRecorder } from './InteractionRecorder';
 import { InteractionRecord } from './InteractionRecord';
 import { Tool } from './Tool';
-import { Canvas, Style } from './Canvas';
-
-interface ActionRecord {
-  tool: Tool;
-  record: InteractionRecord;
-}
+import { Canvas } from './Canvas';
+import { Style } from './interfaces/Style';
+import { Action } from './interfaces/Action';
 
 interface PixelizerConfig {
   tool?: Tool;
@@ -29,8 +26,8 @@ export class Pixelizer {
 
   private adapter: InteractionAdapter;
   private canvas: Canvas;
-  private actions: ActionRecord[];
-  private newActionListener: (action: ActionRecord) => void;
+  private actions: Action[];
+  private newActionListener: (action: Action) => void;
   private style: Style;
 
   constructor(adapter: InteractionAdapter) {
@@ -89,17 +86,17 @@ export class Pixelizer {
     }
   }
 
-  public applyActions(actions: ActionRecord[] = []) {
+  public applyActions(actions: Action[] = []) {
     actions.forEach((action) => {
       this.applyAction(action);
     });
   }
 
-  public addNewActionListener(listener: (action: ActionRecord) => void) {
+  public addNewActionListener(listener: (action: Action) => void) {
     this.newActionListener = listener;
   }
 
-  private applyAction(action: ActionRecord) {
+  private applyAction(action: Action) {
     this.canvas.applyTool(action.tool, action.record);
   }
 }

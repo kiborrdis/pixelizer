@@ -14,5 +14,8 @@ module.exports = {
     "json",
     "node"
   ],
-  "setupFiles": ["jest-canvas-mock"]
+  "setupFiles": [
+    "jest-canvas-mock",
+    "./jest/globals.js"
+  ]
 }
