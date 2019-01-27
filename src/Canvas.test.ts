@@ -2,9 +2,32 @@ import { Canvas } from './Canvas';
 import { InteractionRecord } from './InteractionRecord';
 import { Point } from './Point';
 import { Tool } from './Tool';
+import { Mutation } from './interfaces/Mutation';
+import { Action } from './interfaces/Action';
 
 class MockTool extends Tool {
   public applyToContext = jest.fn();
+}
+
+function createAction(): Action {
+  return {
+    tool: new MockTool(),
+    record: new InteractionRecord(),
+    style: {
+      color: Math.random().toString(36).substring(7),
+    },
+  };
+}
+
+function createMutation(withCheckpoint: boolean): Mutation {
+  return {
+    actions: [ createAction(), createAction() ],
+    checkpoint: withCheckpoint ? new ImageData(2, 2) : undefined,
+  };
+}
+
+function assertMutationActionsWereCalled(mutation: Mutation) {
+  mutation.actions.forEach((action) => expect(action.tool.applyToContext).toBeCalled());
 }
 
 describe('Canvas', () => {
@@ -37,12 +60,6 @@ describe('Canvas', () => {
     expect(canvas.element.height).toBe(300);
   });
 
-  test('should apply tool to context when calling applyTool', () => {
-    canvas.applyTool(tool, record);
-
-    expect(tool.applyToContext).toBeCalled();
-  });
-
   test('should return image data with proper data length', () => {
     canvas.setSize(1, 1);
 
@@ -62,11 +79,13 @@ describe('Canvas', () => {
     expect(canvas.context.getImageData).toBeCalled();
   });
 
-  test('should put image data on applyAction after previewAction', () => {
-    canvas.previewTool(tool, record);
-    canvas.applyTool(tool, record);
+  test('should put image data on applyMutation without checkpoint after previewAction', () => {
+    const mutation = createMutation(false);
 
-    expect(tool.applyToContext).toBeCalled();
+    canvas.previewTool(tool, record);
+    canvas.applyMutation(mutation);
+
+    assertMutationActionsWereCalled(mutation);
     expect(canvas.context.putImageData).toBeCalled();
   });
 
@@ -86,13 +105,33 @@ describe('Canvas', () => {
     expect(canvas.context.getImageData).toBeCalledTimes(1);
   });
 
-  test('should not put image data on second applyAction after previewAction', () => {
-    canvas.previewTool(tool, record);
-    canvas.applyTool(tool, record);
-    canvas.applyTool(tool, record);
+  test('should not put image data on second applyMutation without checkpoint after previewAction', () => {
+    const mutation1 = createMutation(false);
+    const mutation2 = createMutation(false);
 
-    expect(tool.applyToContext).toBeCalled();
+    canvas.previewTool(tool, record);
+    canvas.applyMutation(mutation1);
+    canvas.applyMutation(mutation2);
+
     expect(canvas.context.putImageData).toBeCalledTimes(1);
+  });
+
+  test('should put image data once on applyMutation with checkpoint after previewAction', () => {
+    const mutation = createMutation(true);
+
+    canvas.previewTool(tool, record);
+    canvas.applyMutation(mutation);
+
+    expect(canvas.context.putImageData).toBeCalledTimes(1);
+  });
+
+  test('should put image data with checkpoint and apply actions on applyMutation with checkpoint', () => {
+    const mutation = createMutation(true);
+
+    canvas.applyMutation(mutation);
+
+    assertMutationActionsWereCalled(mutation);
+    expect(canvas.context.putImageData).toBeCalledWith(mutation.checkpoint, 0, 0);
   });
 
   test('should set stroke and fill style after set style', () => {

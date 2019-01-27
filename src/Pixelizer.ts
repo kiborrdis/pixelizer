@@ -10,6 +10,8 @@ import { Tool } from './Tool';
 import { Canvas } from './Canvas';
 import { Style } from './interfaces/Style';
 import { Action } from './interfaces/Action';
+import { History } from './History';
+import { Mutation } from './interfaces/Mutation';
 
 interface PixelizerConfig {
   tool?: Tool;
@@ -26,23 +28,22 @@ export class Pixelizer {
 
   private adapter: InteractionAdapter;
   private canvas: Canvas;
-  private actions: Action[];
   private newActionListener: (action: Action) => void;
   private style: Style;
+  private history: History;
 
   constructor(adapter: InteractionAdapter) {
     this.adapter = adapter;
     this.connector = new InteractionConnector(this.adapter);
-
-    this.actions = [];
-
     this.canvas = new Canvas();
+    this.history = new History(this.canvas.getImageData());
   }
 
   public mountCanvasInDOMElement(element: HTMLElement) {
     element.appendChild(this.canvas.element);
 
     this.canvas.setSize(this.canvas.element.scrollWidth, this.canvas.element.scrollHeight);
+    this.history = new History(this.canvas.getImageData());
 
     this.adapter.setInteractionElement(this.canvas.element);
   }
@@ -77,9 +78,9 @@ export class Pixelizer {
         record,
         style: { ...this.style },
       };
+      const mutation = this.history.add(action);
 
-      this.applyAction(action);
-      this.actions.push(action);
+      this.applyMutation(mutation);
       if (this.newActionListener) {
         this.newActionListener(action);
       }
@@ -88,7 +89,7 @@ export class Pixelizer {
 
   public applyActions(actions: Action[] = []) {
     actions.forEach((action) => {
-      this.applyAction(action);
+      this.applyMutation(this.history.add(action));
     });
   }
 
@@ -96,7 +97,13 @@ export class Pixelizer {
     this.newActionListener = listener;
   }
 
-  private applyAction(action: Action) {
-    this.canvas.applyTool(action.tool, action.record);
+  public revertAction() {
+    const mutation = this.history.back();
+
+    this.applyMutation(mutation);
+  }
+
+  private applyMutation(mutation: Mutation) {
+    this.canvas.applyMutation(mutation);
   }
 }

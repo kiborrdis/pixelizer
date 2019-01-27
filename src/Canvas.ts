@@ -1,11 +1,8 @@
 import { Tool } from './Tool';
 import { InteractionRecord } from './InteractionRecord';
-import { isContext } from 'vm';
-
-export interface Style {
-  color?: string;
-  lineWidth?: number;
-}
+import { Style } from './interfaces/Style';
+import { Mutation } from './interfaces/Mutation';
+import { Action } from './interfaces/Action';
 
 export class Canvas {
   private canvasElement: HTMLCanvasElement;
@@ -36,10 +33,16 @@ export class Canvas {
     this.canvasElement.height = height;
   }
 
-  public applyTool(tool: Tool, record: InteractionRecord) {
-    this.loadBeforePreviewDataAndApplyAction(tool, record);
+  public applyMutation(mutation: Mutation) {
+    if (mutation.checkpoint) {
+      this.applyImageData(mutation.checkpoint);
+    } else if (this.imageDataBeforePreview) {
+      this.applyImageData(this.imageDataBeforePreview);
+    }
 
     this.imageDataBeforePreview = null;
+
+    mutation.actions.forEach((action) => this.applyAction(action));
   }
 
   public setStyle(style: Style) {
@@ -70,6 +73,16 @@ export class Canvas {
     this.context.fillStyle = this.currentStyle.color;
 
     tool.applyToContext(this.context, record);
+  }
+
+  private applyAction(action: Action) {
+    const style = { ...this.currentStyle, ...action.style };
+
+    this.context.lineWidth = this.currentStyle.lineWidth;
+    this.context.strokeStyle = this.currentStyle.color;
+    this.context.fillStyle = this.currentStyle.color;
+
+    action.tool.applyToContext(this.context, action.record);
   }
 
   public get element() {

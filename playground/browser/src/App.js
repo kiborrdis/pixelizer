@@ -20,6 +20,10 @@ class App extends Component {
     })
   }
 
+  revert = () => {
+    this.pixelizer.revertAction();
+  }
+
   componentDidMount() {
     this.pixelizer.mountCanvasInDOMElement(this.tempRef.current);
   }
@@ -32,14 +36,9 @@ class App extends Component {
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <button onClick={this.revert}>
+            Revert
+          </button>
         </header>
       </div>
     );
