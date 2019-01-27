@@ -4,6 +4,7 @@ import { Point } from './Point';
 import { Tool } from './Tool';
 import { Mutation } from './interfaces/Mutation';
 import { Action } from './interfaces/Action';
+import { create } from 'domain';
 
 class MockTool extends Tool {
   public applyToContext = jest.fn();
@@ -32,13 +33,11 @@ function assertMutationActionsWereCalled(mutation: Mutation) {
 
 describe('Canvas', () => {
   let canvas = new Canvas();
-  let record: InteractionRecord;
-  let tool: MockTool;
+  let actionToPreview: Action;
 
   beforeEach(() => {
-    tool = new MockTool();
     canvas = new Canvas();
-    record = new InteractionRecord();
+    actionToPreview = createAction();
   });
 
   test('should provide canvas html element with right styles', () => {
@@ -73,16 +72,16 @@ describe('Canvas', () => {
   });
 
   test('should access current image data and apply action to context on previewAction', () => {
-    canvas.previewTool(tool, record);
+    canvas.previewAction(actionToPreview);
 
-    expect(tool.applyToContext).toBeCalled();
+    expect(actionToPreview.tool.applyToContext).toBeCalled();
     expect(canvas.context.getImageData).toBeCalled();
   });
 
   test('should put image data on applyMutation without checkpoint after previewAction', () => {
     const mutation = createMutation(false);
 
-    canvas.previewTool(tool, record);
+    canvas.previewAction(actionToPreview);
     canvas.applyMutation(mutation);
 
     assertMutationActionsWereCalled(mutation);
@@ -90,18 +89,18 @@ describe('Canvas', () => {
   });
 
   test('should put image data on previewAction after previewAction', () => {
-    canvas.previewTool(tool, record);
-    canvas.previewTool(tool, record);
+    canvas.previewAction(actionToPreview);
+    canvas.previewAction(actionToPreview);
 
-    expect(tool.applyToContext).toBeCalled();
+    expect(actionToPreview.tool.applyToContext).toBeCalled();
     expect(canvas.context.putImageData).toBeCalled();
   });
 
   test('should access image data only once on consequent previewAction', () => {
-    canvas.previewTool(tool, record);
-    canvas.previewTool(tool, record);
+    canvas.previewAction(actionToPreview);
+    canvas.previewAction(actionToPreview);
 
-    expect(tool.applyToContext).toBeCalled();
+    expect(actionToPreview.tool.applyToContext).toBeCalled();
     expect(canvas.context.getImageData).toBeCalledTimes(1);
   });
 
@@ -109,7 +108,7 @@ describe('Canvas', () => {
     const mutation1 = createMutation(false);
     const mutation2 = createMutation(false);
 
-    canvas.previewTool(tool, record);
+    canvas.previewAction(actionToPreview);
     canvas.applyMutation(mutation1);
     canvas.applyMutation(mutation2);
 
@@ -119,7 +118,7 @@ describe('Canvas', () => {
   test('should put image data once on applyMutation with checkpoint after previewAction', () => {
     const mutation = createMutation(true);
 
-    canvas.previewTool(tool, record);
+    canvas.previewAction(actionToPreview);
     canvas.applyMutation(mutation);
 
     expect(canvas.context.putImageData).toBeCalledTimes(1);
@@ -137,9 +136,10 @@ describe('Canvas', () => {
   test('should set stroke and fill style after set style', () => {
     canvas.setStyle({ color: '#ff00ff', lineWidth: 7 });
 
-    canvas.previewTool(tool, record);
+    canvas.previewAction(actionToPreview);
 
-    const passedContext: CanvasRenderingContext2D = tool.applyToContext.mock.calls[0][0];
+    // @ts-ignore
+    const passedContext: CanvasRenderingContext2D = actionToPreview.tool.applyToContext.mock.calls[0][0];
 
     expect(passedContext.strokeStyle).toBe('#ff00ff');
     expect(passedContext.fillStyle).toBe('#ff00ff');

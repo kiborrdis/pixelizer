@@ -5,5 +5,5 @@ import { Style } from './Style';
 export interface Action {
   tool: Tool;
   record: InteractionRecord;
-  style: Style;
+  style?: Style;
 }

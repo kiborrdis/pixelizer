@@ -49,30 +49,20 @@ export class Canvas {
     this.currentStyle = { ...this.currentStyle, ...style };
   }
 
-  public previewTool(tool: Tool, record: InteractionRecord) {
+  public previewAction(action: Action) {
     let imageData;
 
     if (!this.imageDataBeforePreview) {
       imageData = this.getImageData();
-    }
-
-    this.loadBeforePreviewDataAndApplyAction(tool, record);
-
-    if (!this.imageDataBeforePreview) {
-      this.imageDataBeforePreview = imageData;
-    }
-  }
-
-  private loadBeforePreviewDataAndApplyAction(tool: Tool, record: InteractionRecord) {
-    if (this.imageDataBeforePreview) {
+    } else {
       this.applyImageData(this.imageDataBeforePreview);
     }
 
-    this.context.lineWidth = this.currentStyle.lineWidth;
-    this.context.strokeStyle = this.currentStyle.color;
-    this.context.fillStyle = this.currentStyle.color;
+    this.applyAction(action);
 
-    tool.applyToContext(this.context, record);
+    if (imageData) {
+      this.imageDataBeforePreview = imageData;
+    }
   }
 
   private applyAction(action: Action) {

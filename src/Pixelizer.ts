@@ -67,7 +67,11 @@ export class Pixelizer {
 
   private preview = (record: InteractionRecord) => {
     if (this.currentTool) {
-      this.canvas.previewTool(this.currentTool, record);
+      this.canvas.previewAction({
+        tool: this.currentTool,
+        record,
+        style: { ...this.style },
+      });
     }
   }
 
@@ -99,8 +103,8 @@ export class Pixelizer {
 
   public revertAction() {
     const mutation = this.history.back();
-
     this.applyMutation(mutation);
+
   }
 
   private applyMutation(mutation: Mutation) {
