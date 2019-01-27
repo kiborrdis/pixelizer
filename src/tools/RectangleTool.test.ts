@@ -22,6 +22,11 @@ describe('RectangleTool', () => {
     // @ts-ignore
     const producedPath: Path2D = canvas.context.stroke.mock.calls[0][0];
 
-    expect(producedPath.rect).toBeCalledWith(startPoint.x, startPoint.y, endPoint.x - startPoint.x, endPoint.y - startPoint.y);
+    expect(producedPath.rect).toBeCalledWith(
+      startPoint.x,
+      startPoint.y,
+      endPoint.x - startPoint.x,
+      endPoint.y - startPoint.y,
+    );
   });
 });
