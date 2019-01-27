@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Pixelizer, LineTool, RectangleTool, TwoPointRecorder, BrowserInteractionAdapter } from 'pixelize';
+import { Pixelizer, LineTool, RectangleTool, TwoPointRecorder, NPointRecorder, MultilineTool, BrowserInteractionAdapter } from 'pixelize';
 import logo from './logo.svg';
 import './App.css';
 
@@ -11,8 +11,8 @@ class App extends Component {
 
     this.pixelizer = new Pixelizer(new BrowserInteractionAdapter());
     this.pixelizer.setConfig({
-      recorderCreator: (...args) => new TwoPointRecorder(...args),
-      tool: new RectangleTool(),
+      recorderCreator: (...args) => new NPointRecorder(...args),
+      tool: new MultilineTool(),
     })
   }
 
