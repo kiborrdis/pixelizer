@@ -94,4 +94,16 @@ describe('Canvas', () => {
     expect(tool.applyToContext).toBeCalled();
     expect(canvas.context.putImageData).toBeCalledTimes(1);
   });
+
+  test('should set stroke and fill style after set style', () => {
+    canvas.setStyle({ color: '#ff00ff', lineWidth: 7 });
+
+    canvas.previewTool(tool, record);
+
+    const passedContext: CanvasRenderingContext2D = tool.applyToContext.mock.calls[0][0];
+
+    expect(passedContext.strokeStyle).toBe('#ff00ff');
+    expect(passedContext.fillStyle).toBe('#ff00ff');
+    expect(passedContext.lineWidth).toBe(7);
+  });
 });

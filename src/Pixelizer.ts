@@ -7,7 +7,7 @@ import { InteractionConnector } from './InteractionConnector';
 import { InteractionRecorder } from './InteractionRecorder';
 import { InteractionRecord } from './InteractionRecord';
 import { Tool } from './Tool';
-import { Canvas } from './Canvas';
+import { Canvas, Style } from './Canvas';
 
 interface ActionRecord {
   tool: Tool;
@@ -31,6 +31,7 @@ export class Pixelizer {
   private canvas: Canvas;
   private actions: ActionRecord[];
   private newActionListener: (action: ActionRecord) => void;
+  private style: Style;
 
   constructor(adapter: InteractionAdapter) {
     this.adapter = adapter;
@@ -42,9 +43,6 @@ export class Pixelizer {
   }
 
   public mountCanvasInDOMElement(element: HTMLElement) {
-    this.canvas.context.fillStyle = '#00f';
-    this.canvas.context.lineWidth = 5;
-
     element.appendChild(this.canvas.element);
 
     this.canvas.setSize(this.canvas.element.scrollWidth, this.canvas.element.scrollHeight);
@@ -63,6 +61,12 @@ export class Pixelizer {
     }
   }
 
+  public setStyle(style: Style) {
+    this.style = style;
+
+    this.canvas.setStyle(style);
+  }
+
   private preview = (record: InteractionRecord) => {
     if (this.currentTool) {
       this.canvas.previewTool(this.currentTool, record);
@@ -74,6 +78,7 @@ export class Pixelizer {
       const action = {
         tool: this.currentTool,
         record,
+        style: { ...this.style },
       };
 
       this.applyAction(action);

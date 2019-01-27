@@ -10,9 +10,13 @@ class App extends Component {
     super();
 
     this.pixelizer = new Pixelizer(new BrowserInteractionAdapter());
+    this.pixelizer.setStyle({
+      lineWidth: 10,
+      color: '#ff00ff',
+    })
     this.pixelizer.setConfig({
-      recorderCreator: (...args) => new NPointRecorder(...args),
-      tool: new MultilineTool(),
+      recorderCreator: (...args) => new TwoPointRecorder(...args),
+      tool: new RectangleTool(),
     })
   }
 
