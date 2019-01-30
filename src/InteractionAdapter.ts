@@ -14,7 +14,7 @@ export enum InteractionEventType {
 export interface InteractionEvent {
   type: InteractionEventType;
   id?: string;
-  position: Point;
+  position?: Point;
 }
 
 export abstract class InteractionAdapter {
@@ -50,7 +50,6 @@ export abstract class InteractionAdapter {
 
     typeListeners.forEach((listener) => {
       listener(event);
-
     });
   }
 }

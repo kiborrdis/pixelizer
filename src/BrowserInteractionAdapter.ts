@@ -18,11 +18,13 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
     element.addEventListener('mouseup', this.handleInteractionStop);
     element.addEventListener('mouseleave', this.handleInteractionStop);
     element.addEventListener('mousemove', this.handleMouseMove);
+    element.addEventListener('click', this.handleClick);
+    element.addEventListener('wheel', this.handleWheel);
   }
 
   private handleMouseDown = (event: MouseEvent) => {
     this.emitInteractionEvent(
-      this.transformEventToInteractionEvent(InteractionEventType.PressStart, event),
+      this.transformMouseEventToInteractionEvent(InteractionEventType.PressStart, event),
     );
 
     this.interactionStarted = true;
@@ -31,7 +33,7 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
   private handleInteractionStop = (event: MouseEvent) => {
     if (this.interactionStarted) {
       this.emitInteractionEvent(
-        this.transformEventToInteractionEvent(InteractionEventType.PressStop, event),
+        this.transformMouseEventToInteractionEvent(InteractionEventType.PressStop, event),
       );
     }
 
@@ -41,12 +43,37 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
   private handleMouseMove = (event: MouseEvent) => {
     if (this.interactionStarted) {
       this.emitInteractionEvent(
-        this.transformEventToInteractionEvent(InteractionEventType.MoveDuringPress, event),
+        this.transformMouseEventToInteractionEvent(InteractionEventType.MoveDuringPress, event),
+      );
+    } else {
+      this.emitInteractionEvent(
+        this.transformMouseEventToInteractionEvent(InteractionEventType.Move, event),
       );
     }
   }
 
-  private transformEventToInteractionEvent(
+  private handleClick = (event: MouseEvent) => {
+    this.emitInteractionEvent(
+      this.transformMouseEventToInteractionEvent(InteractionEventType.Press, event),
+    );
+  }
+
+  private handleWheel = (event: WheelEvent) => {
+    this.emitInteractionEvent(
+      this.transformWheelEventToInteractionEvent(event),
+    );
+  }
+
+  private transformWheelEventToInteractionEvent(
+    event: WheelEvent,
+  ) {
+    return {
+      id: '0',
+      type: event.deltaY > 0 ? InteractionEventType.Increase : InteractionEventType.Decrease,
+    };
+  }
+
+  private transformMouseEventToInteractionEvent(
     type: InteractionEventType,
     event: MouseEvent,
   ) {
