@@ -133,6 +133,7 @@ describe('Canvas', () => {
 
   test('should set stroke and fill style after set style', () => {
     canvas.setStyle({ color: '#ff00ff', lineWidth: 7 });
+    actionToPreview.style = {};
 
     canvas.previewAction(actionToPreview);
 
@@ -141,6 +142,19 @@ describe('Canvas', () => {
 
     expect(passedContext.strokeStyle).toBe('#ff00ff');
     expect(passedContext.fillStyle).toBe('#ff00ff');
+    expect(passedContext.lineWidth).toBe(7);
+  });
+
+  test('should set stroke and fill colors passed with action', () => {
+    canvas.setStyle({ color: '#ff00ff', lineWidth: 7 });
+
+    canvas.previewAction(actionToPreview);
+
+    // @ts-ignore
+    const passedContext: CanvasRenderingContext2D = actionToPreview.tool.applyToContext.mock.calls[0][0];
+
+    expect(passedContext.strokeStyle).toBe(actionToPreview.style.color);
+    expect(passedContext.fillStyle).toBe(actionToPreview.style.color);
     expect(passedContext.lineWidth).toBe(7);
   });
 });

@@ -66,9 +66,9 @@ export class Canvas {
   private applyAction(action: Action) {
     const style = { ...this.currentStyle, ...action.style };
 
-    this.context.lineWidth = this.currentStyle.lineWidth;
-    this.context.strokeStyle = this.currentStyle.color;
-    this.context.fillStyle = this.currentStyle.color;
+    this.context.lineWidth = style.lineWidth;
+    this.context.strokeStyle = style.color;
+    this.context.fillStyle = style.color;
 
     action.tool.applyToContext(this.context, action.record, {
       width: this.canvasElement.width,
