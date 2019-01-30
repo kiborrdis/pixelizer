@@ -2,7 +2,7 @@ import { Action } from './interfaces/Action';
 import { Style } from './interfaces/Style';
 import { Serializable } from './interfaces/Serializable';
 import { SerializedObject } from './interfaces/SerializedObject';
-import { InteractionRecord } from './InteractionRecord';
+import { InteractionRecord } from './recorders/InteractionRecord';
 import * as Tools from './tools/index';
 import * as Records from './recorders/index';
 
@@ -57,6 +57,9 @@ function deserializeRecord(obj: SerializedObject): InteractionRecord {
       record.point = obj.data.point;
       record.value = obj.data.value;
 
+      return record;
+    }
+    case Records.InteractionRecord.name: {
       return record;
     }
     default: {

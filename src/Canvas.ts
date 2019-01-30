@@ -70,7 +70,10 @@ export class Canvas {
     this.context.strokeStyle = this.currentStyle.color;
     this.context.fillStyle = this.currentStyle.color;
 
-    action.tool.applyToContext(this.context, action.record);
+    action.tool.applyToContext(this.context, action.record, {
+      width: this.canvasElement.width,
+      height: this.canvasElement.height,
+    });
   }
 
   public get element() {

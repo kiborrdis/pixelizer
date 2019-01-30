@@ -6,7 +6,7 @@ import {
 import { Pixelizer } from './Pixelizer';
 import { Tool } from './tools/Tool';
 import { InteractionRecorder } from './recorders/InteractionRecorder';
-import { InteractionRecord } from './InteractionRecord';
+import { InteractionRecord } from './recorders/InteractionRecord';
 
 class MockTool extends Tool {
   public applyToContext = jest.fn();

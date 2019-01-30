@@ -5,7 +5,7 @@ import {
 } from './InteractionAdapter';
 import { InteractionConnector } from './InteractionConnector';
 import { InteractionRecorder } from './recorders/InteractionRecorder';
-import { InteractionRecord } from './InteractionRecord';
+import { InteractionRecord } from './recorders/InteractionRecord';
 import { Tool } from './tools/Tool';
 import { Canvas } from './Canvas';
 import { Style } from './interfaces/Style';

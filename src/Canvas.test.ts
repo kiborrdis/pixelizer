@@ -1,5 +1,5 @@
 import { Canvas } from './Canvas';
-import { InteractionRecord } from './InteractionRecord';
+import { InteractionRecord } from './recorders/InteractionRecord';
 import { Tool } from './tools/Tool';
 import { Mutation } from './interfaces/Mutation';
 import { Action } from './interfaces/Action';

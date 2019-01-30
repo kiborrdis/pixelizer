@@ -1,5 +1,5 @@
 import { Tool } from './Tool';
-import { InteractionRecord } from '../InteractionRecord';
+import { InteractionRecord } from '../recorders/InteractionRecord';
 import { TwoPointRecord } from '../recorders/TwoPointRecorder';
 
 export class LineTool extends Tool {

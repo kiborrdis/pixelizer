@@ -1,5 +1,5 @@
 import { InteractionRecorder } from './InteractionRecorder';
-import { InteractionRecord } from '../InteractionRecord';
+import { InteractionRecord } from './InteractionRecord';
 import { InteractionEvent } from '../InteractionAdapter';
 import { Point } from '../interfaces/Point';
 

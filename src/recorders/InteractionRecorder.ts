@@ -1,6 +1,6 @@
 import { InteractionEvent } from '../InteractionAdapter';
 import { InteractionHandler } from '../interfaces/InteractionHandler';
-import { InteractionRecord } from '../InteractionRecord';
+import { InteractionRecord } from './InteractionRecord';
 
 export abstract class InteractionRecorder implements InteractionHandler {
   private requestPreview: (record: InteractionRecord) => void;
