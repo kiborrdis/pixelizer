@@ -5,6 +5,15 @@ import { Point } from '../interfaces/Point';
 
 export class NPointRecord extends InteractionRecord {
   public points: Point[] = [];
+
+  public serialize() {
+    const obj = super.serialize();
+
+    return {
+      ...obj,
+      data: [ ...this.points ],
+    };
+  }
 }
 
 export class NPointRecorder extends InteractionRecorder {

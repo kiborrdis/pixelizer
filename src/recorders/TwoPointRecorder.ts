@@ -6,6 +6,18 @@ import { Point } from '../interfaces/Point';
 export class TwoPointRecord extends InteractionRecord {
   public startPoint: Point;
   public endPoint: Point;
+
+  public serialize() {
+    const obj = super.serialize();
+
+    return {
+      ...obj,
+      data: {
+        startPoint: this.startPoint,
+        endPoint: this.endPoint,
+      },
+    };
+  }
 }
 
 export class TwoPointRecorder extends InteractionRecorder {
