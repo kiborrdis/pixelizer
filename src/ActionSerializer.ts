@@ -53,6 +53,12 @@ function deserializeRecord(obj: SerializedObject): InteractionRecord {
 
       return record;
     }
+    case Records.PointScalarRecord.name: {
+      record.point = obj.data.point;
+      record.value = obj.data.value;
+
+      return record;
+    }
     default: {
       throw new Error(`No deserialization strategy for record with class '${obj.type}'`);
     }
