@@ -1,8 +1,7 @@
-import { InteractionRecorder } from '../InteractionRecorder';
+import { InteractionRecorder } from './InteractionRecorder';
 import { InteractionRecord } from '../InteractionRecord';
 import { InteractionEvent } from '../InteractionAdapter';
-import { Point } from '../Point';
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
+import { Point } from '../interfaces/Point';
 
 export class NPointRecord extends InteractionRecord {
   public points: Point[] = [];

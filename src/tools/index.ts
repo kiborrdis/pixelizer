@@ -1,2 +1,4 @@
-export { RectangleTool } from './RectangleTool';
-export { MultilineTool } from './MultilineTool';
+export * from './RectangleTool';
+export * from './MultilineTool';
+export * from './LineTool';
+export * from './Tool';

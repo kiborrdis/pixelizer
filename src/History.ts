@@ -1,6 +1,3 @@
-import { InteractionRecord } from './InteractionRecord';
-import { Tool } from './Tool';
-import { Style } from './interfaces/Style';
 import { Action } from './interfaces/Action';
 import { Mutation } from './interfaces/Mutation';
 

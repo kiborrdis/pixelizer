@@ -1,4 +1,4 @@
-import { Tool } from '../Tool';
+import { Tool } from './Tool';
 import { InteractionRecord } from '../InteractionRecord';
 import { NPointRecord } from '../recorders/NPointRecorder';
 

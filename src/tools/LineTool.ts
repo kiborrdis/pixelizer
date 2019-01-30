@@ -1,6 +1,6 @@
 import { Tool } from './Tool';
-import { InteractionRecord } from './InteractionRecord';
-import { TwoPointRecord } from './TwoPointRecorder';
+import { InteractionRecord } from '../InteractionRecord';
+import { TwoPointRecord } from '../recorders/TwoPointRecorder';
 
 export class LineTool extends Tool {
   public applyToContext(context: CanvasRenderingContext2D, record: InteractionRecord) {

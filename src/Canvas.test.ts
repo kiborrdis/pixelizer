@@ -1,10 +1,8 @@
 import { Canvas } from './Canvas';
 import { InteractionRecord } from './InteractionRecord';
-import { Point } from './Point';
-import { Tool } from './Tool';
+import { Tool } from './tools/Tool';
 import { Mutation } from './interfaces/Mutation';
 import { Action } from './interfaces/Action';
-import { create } from 'domain';
 
 class MockTool extends Tool {
   public applyToContext = jest.fn();

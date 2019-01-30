@@ -1,6 +1,5 @@
 import {
   InteractionAdapter,
-  InteractionEvent,
   InteractionEventType,
 } from './InteractionAdapter';
 

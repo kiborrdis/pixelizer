@@ -1,8 +1,7 @@
 import { History } from './History';
 import { InteractionRecord } from './InteractionRecord';
-import { Tool } from './Tool';
+import { Tool } from './tools/Tool';
 import { Action } from './interfaces/Action';
-import { Mutation } from './interfaces/Mutation';
 
 class MockTool extends Tool {}
 

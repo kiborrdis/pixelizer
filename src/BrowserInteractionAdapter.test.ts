@@ -1,6 +1,6 @@
 import { InteractionEventType } from './InteractionAdapter';
 import { BrowserInteractionAdapter } from './BrowserInteractionAdapter';
-import { Point } from './Point';
+import { Point } from './interfaces/Point';
 
 describe('BrowserInteractionAdapter', () => {
   test('should succesfully be creared', () => {

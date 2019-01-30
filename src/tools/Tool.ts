@@ -1,5 +1,5 @@
 
-import { InteractionRecord } from './InteractionRecord';
+import { InteractionRecord } from '../InteractionRecord';
 
 export abstract class Tool {
   public applyToContext(context: CanvasRenderingContext2D, record: InteractionRecord): void {

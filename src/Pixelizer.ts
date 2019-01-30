@@ -4,9 +4,9 @@ import {
   InteractionEventType,
 } from './InteractionAdapter';
 import { InteractionConnector } from './InteractionConnector';
-import { InteractionRecorder } from './InteractionRecorder';
+import { InteractionRecorder } from './recorders/InteractionRecorder';
 import { InteractionRecord } from './InteractionRecord';
-import { Tool } from './Tool';
+import { Tool } from './tools/Tool';
 import { Canvas } from './Canvas';
 import { Style } from './interfaces/Style';
 import { Action } from './interfaces/Action';

@@ -1,4 +1,4 @@
-import { Point } from './Point';
+import { Point } from './interfaces/Point';
 
 export enum InteractionEventType {
   PressStart = 1,

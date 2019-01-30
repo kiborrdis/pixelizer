@@ -1,6 +1,6 @@
 import { NPointRecorder, NPointRecord } from './NPointRecorder';
 import { InteractionEventType } from '../InteractionAdapter';
-import { Point } from '../Point';
+import { Point } from '../interfaces/Point';
 
 describe('NPointRecorder', () => {
   let recorder: NPointRecorder;

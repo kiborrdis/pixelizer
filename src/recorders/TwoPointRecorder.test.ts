@@ -1,7 +1,6 @@
 import { TwoPointRecorder, TwoPointRecord } from './TwoPointRecorder';
-import { InteractionEventType } from './InteractionAdapter';
-import { Point } from './Point';
-import { Canvas } from './Canvas';
+import { InteractionEventType } from '../InteractionAdapter';
+import { Point } from '../interfaces/Point';
 
 describe('TwoPointRecorder', () => {
   let recorder: TwoPointRecorder;

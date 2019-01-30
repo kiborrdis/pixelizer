@@ -1,7 +1,6 @@
 import { LineTool } from './LineTool';
-import { InteractionRecord } from './InteractionRecord';
-import { TwoPointRecord } from './TwoPointRecorder';
-import { Canvas } from './Canvas';
+import { TwoPointRecord } from '../recorders/TwoPointRecorder';
+import { Canvas } from '../Canvas';
 
 describe('LineAction', () => {
   test('should apply line path to canvas', () => {

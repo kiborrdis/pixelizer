@@ -4,10 +4,9 @@ import {
   InteractionEvent,
 } from './InteractionAdapter';
 import { Pixelizer } from './Pixelizer';
-import { Tool } from './Tool';
-import { InteractionRecorder } from './InteractionRecorder';
+import { Tool } from './tools/Tool';
+import { InteractionRecorder } from './recorders/InteractionRecorder';
 import { InteractionRecord } from './InteractionRecord';
-import { Point } from './Point';
 
 class MockTool extends Tool {
   public applyToContext = jest.fn();

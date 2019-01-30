@@ -1,6 +1,5 @@
 import { RectangleTool } from './RectangleTool';
-import { InteractionRecord } from '../InteractionRecord';
-import { TwoPointRecord } from '../TwoPointRecorder';
+import { TwoPointRecord } from '../recorders/TwoPointRecorder';
 import { Canvas } from '../Canvas';
 
 describe('RectangleTool', () => {

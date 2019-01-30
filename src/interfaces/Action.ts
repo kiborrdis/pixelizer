@@ -1,5 +1,5 @@
 import { InteractionRecord } from '../InteractionRecord';
-import { Tool } from '../Tool';
+import { Tool } from '../tools/Tool';
 import { Style } from './Style';
 
 export interface Action {

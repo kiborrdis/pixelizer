@@ -1,7 +1,7 @@
 import { InteractionRecorder } from './InteractionRecorder';
-import { InteractionRecord } from './InteractionRecord';
-import { InteractionEvent } from './InteractionAdapter';
-import { Point } from './Point';
+import { InteractionRecord } from '../InteractionRecord';
+import { InteractionEvent } from '../InteractionAdapter';
+import { Point } from '../interfaces/Point';
 
 export class TwoPointRecord extends InteractionRecord {
   public startPoint: Point;

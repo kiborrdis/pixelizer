@@ -1,7 +1,6 @@
 import { InteractionAdapter, InteractionEventType } from './InteractionAdapter';
 import { InteractionHandler } from './interfaces/InteractionHandler';
 import { InteractionConnector } from './InteractionConnector';
-import { connect } from 'tls';
 
 class InteractionAdapterImpl extends InteractionAdapter {
   public setInteractionElement() {}

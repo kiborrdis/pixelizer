@@ -1,5 +1,4 @@
 import { MultilineTool } from './MultilineTool';
-import { InteractionRecord } from '../InteractionRecord';
 import { NPointRecord } from '../recorders/NPointRecorder';
 import { Canvas } from '../Canvas';
 
