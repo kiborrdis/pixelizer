@@ -6,6 +6,7 @@ import {
 import { InteractionConnector } from './InteractionConnector';
 import { InteractionRecorder } from './recorders/InteractionRecorder';
 import { InteractionRecord } from './recorders/InteractionRecord';
+import { FillTool } from './tools/FillTool';
 import { Tool } from './tools/Tool';
 import { Canvas } from './Canvas';
 import { Style } from './interfaces/Style';
@@ -46,6 +47,14 @@ export class Pixelizer {
     this.history = new History(this.canvas.getImageData());
 
     this.adapter.setInteractionElement(this.canvas.element);
+
+    const mutation = this.history.add({
+      tool: new FillTool(),
+      record: new InteractionRecord(),
+      style: { color: '#ffffff' },
+    });
+
+    this.applyMutation(mutation);
   }
 
   public setConfig(config: PixelizerConfig) {
