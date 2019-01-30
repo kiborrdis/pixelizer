@@ -25,6 +25,7 @@ export class PointScalarRecord extends InteractionRecord {
 
 export class PointScalarRecorder extends InteractionRecorder {
   private currentRecord: PointScalarRecord = new PointScalarRecord();
+  private lastValue: number = 3;
 
   public move(event: InteractionEvent) {
     this.currentRecord.point = event.position;
@@ -33,13 +34,15 @@ export class PointScalarRecorder extends InteractionRecorder {
   }
 
   public increase(event: InteractionEvent) {
-    this.currentRecord.value = Math.min(MAX_SCALAR_VALUE, this.currentRecord.value + 1);
+    this.lastValue = Math.min(MAX_SCALAR_VALUE, this.lastValue + 1);
+    this.currentRecord.value = this.lastValue;
 
     this.preview(this.currentRecord);
   }
 
   public decrease(event: InteractionEvent) {
-    this.currentRecord.value = Math.max(MIN_SCALAR_VALUE, this.currentRecord.value - 1);
+    this.lastValue = Math.max(MIN_SCALAR_VALUE, this.lastValue - 1);
+    this.currentRecord.value = this.lastValue;
 
     this.preview(this.currentRecord);
   }
@@ -48,5 +51,8 @@ export class PointScalarRecorder extends InteractionRecorder {
     this.currentRecord.point = event.position;
 
     this.finishRecord(this.currentRecord);
+
+    this.currentRecord = new PointScalarRecord();
+    this.currentRecord.value = this.lastValue;
   }
 }
