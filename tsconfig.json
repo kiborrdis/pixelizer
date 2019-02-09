@@ -1,7 +1,4 @@
 {
-  "files": [
-      "src/main.ts"
-  ],
   "compilerOptions": {
     "module": "esnext",
     "lib": [
@@ -17,5 +14,9 @@
     "esModuleInterop": true
   },
   "include": [
+    "src/**/*.ts"
   ],
+  "exclude": [
+    "src/**/*.test.ts"
+  ]
 }

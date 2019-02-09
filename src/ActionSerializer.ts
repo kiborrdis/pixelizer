@@ -10,7 +10,7 @@ interface StringObj {
   [key: string]: any;
 }
 
-interface ActionObject {
+export interface ActionObject {
   tool: SerializedObject;
   record: SerializedObject;
   style?: Style;
