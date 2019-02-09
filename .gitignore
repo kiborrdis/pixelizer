@@ -2,4 +2,4 @@ node_modules
 .vscode
 .rpt2_cache
 yarn-error.log
-dist
+playground

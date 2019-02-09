@@ -9,12 +9,13 @@
       "dom"
     ],
     "noImplicitAny": true,
-    "target": "es6",
+    "target": "es5",
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "declaration": true,
+    "declarationDir": "./types",
     "esModuleInterop": true
   },
   "include": [
-    "src/**/*.test.ts"
   ],
 }

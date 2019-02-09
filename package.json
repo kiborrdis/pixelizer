@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/bundle.js",
+  "types": "types/main.d.ts",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",
@@ -22,7 +23,9 @@
     "jest-canvas-mock": "^1.1.1-beta.1",
     "rollup": "^1.1.2",
     "rollup-plugin-typescript2": "^0.19.2",
+    "rollup-plugin-uglify": "^6.0.2",
     "ts-jest": "^23.10.5",
-    "tslint": "^5.12.1"
+    "tslint": "^5.12.1",
+    "uglify-js": "^3.4.9"
   }
 }
