@@ -11,7 +11,14 @@ export default [
     },
     plugins: [
       typescript({ useTsconfigDeclarationDir: true }),
-      uglify(),
+      uglify({
+        compress: {
+          keep_fnames: true,
+        },
+        mangle: {
+          keep_fnames: true,
+        },
+      }),
     ]
   },
 ];
