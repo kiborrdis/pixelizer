@@ -4,7 +4,7 @@ import { InteractionRecord } from './recorders/InteractionRecord';
 import { Tool } from './tools/Tool';
 import { Style } from './interfaces/Style';
 import { Action } from './interfaces/Action';
-interface PixelizerConfig {
+export interface PixelizerConfig {
     tool?: Tool;
     recorderCreator?: (preview: (record: InteractionRecord) => void, finish: (record: InteractionRecord) => void) => InteractionRecorder;
 }
@@ -17,15 +17,17 @@ export declare class Pixelizer {
     private newActionListener;
     private style;
     private history;
+    private interactionsAllowed;
     constructor(adapter: InteractionAdapter);
     mountCanvasInDOMElement(element: HTMLElement): void;
     setConfig(config: PixelizerConfig): void;
     setStyle(style: Style): void;
     private preview;
     private finishAction;
+    enableInteractions(value: boolean): void;
+    clear(): void;
     applyActions(actions?: Action[]): void;
     addNewActionListener(listener: (action: Action) => void): void;
     revertAction(): void;
     private applyMutation;
 }
-export {};

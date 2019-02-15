@@ -1,6 +1,7 @@
 import { InteractionAdapter } from './InteractionAdapter';
 export declare class BrowserInteractionAdapter extends InteractionAdapter {
     private elementRect;
+    private element;
     private interactionStarted;
     setInteractionElement(element: HTMLElement): void;
     private handleMouseDown;

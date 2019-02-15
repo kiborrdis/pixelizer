@@ -12,6 +12,7 @@ export declare class Canvas {
     applyMutation(mutation: Mutation): void;
     setStyle(style: Style): void;
     previewAction(action: Action): void;
+    resetPreview(): void;
     private applyAction;
     readonly element: HTMLCanvasElement;
     readonly context: CanvasRenderingContext2D;
