@@ -14,7 +14,7 @@ import { Action } from './interfaces/Action';
 import { History } from './History';
 import { Mutation } from './interfaces/Mutation';
 
-interface PixelizerConfig {
+export interface PixelizerConfig {
   tool?: Tool;
   recorderCreator?: (
     preview: (record: InteractionRecord) => void,
@@ -32,6 +32,7 @@ export class Pixelizer {
   private newActionListener: (action: Action) => void;
   private style: Style;
   private history: History;
+  private interactionsAllowed: boolean = true;
 
   constructor(adapter: InteractionAdapter) {
     this.adapter = adapter;
@@ -75,6 +76,10 @@ export class Pixelizer {
   }
 
   private preview = (record: InteractionRecord) => {
+    if (!this.interactionsAllowed) {
+      return;
+    }
+
     if (this.currentTool) {
       this.canvas.previewAction({
         tool: this.currentTool,
@@ -85,6 +90,10 @@ export class Pixelizer {
   }
 
   private finishAction = (record: InteractionRecord) => {
+    if (!this.interactionsAllowed) {
+      return;
+    }
+
     if (this.currentTool) {
       const action = {
         tool: this.currentTool,
@@ -98,6 +107,23 @@ export class Pixelizer {
         this.newActionListener(action);
       }
     }
+  }
+
+  public enableInteractions(value: boolean) {
+    this.interactionsAllowed = value;
+  }
+
+  public clear() {
+    const fill = {
+      tool: new FillTool(),
+      record: new InteractionRecord(),
+      style: { color: '#ffffff' },
+    };
+
+    this.applyMutation(this.history.add(fill));
+
+    this.history = new History(this.canvas.getImageData());
+    this.history.add(fill);
   }
 
   public applyActions(actions: Action[] = []) {
