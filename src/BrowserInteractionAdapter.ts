@@ -5,13 +5,14 @@ import {
 
 export class BrowserInteractionAdapter extends InteractionAdapter {
   private elementRect: ClientRect;
+  private element: HTMLElement;
   private interactionStarted: boolean = false;
 
   public setInteractionElement(element: HTMLElement): void {
     if (!element) {
       throw new Error('Interaction element is not provided');
     }
-
+    this.element = element;
     this.elementRect = element.getBoundingClientRect();
 
     element.addEventListener('mousedown', this.handleMouseDown);
@@ -77,9 +78,10 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
     type: InteractionEventType,
     event: MouseEvent,
   ) {
+    this.elementRect = this.element.getBoundingClientRect();
     const offsetX = event.clientX - this.elementRect.left;
     const offsetY = event.clientY - this.elementRect.top;
 
-    return { position: { x: offsetX, y: offsetY }, id: '0', type };
+    return { position: { x: Math.floor(offsetX), y: Math.floor(offsetY) }, id: '0', type };
   }
 }
