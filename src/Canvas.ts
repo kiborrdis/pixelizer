@@ -5,7 +5,7 @@ import { Action } from './interfaces/Action';
 export class Canvas {
   private canvasElement: HTMLCanvasElement;
   private canvasContext: CanvasRenderingContext2D;
-  private imageDataBeforePreview: ImageData;
+  private imageDataBeforePreview: ImageData | null;
   private currentStyle: Style = {
     color: '#ffffff',
     lineWidth: 1,
@@ -63,12 +63,21 @@ export class Canvas {
     }
   }
 
+  public resetPreview() {
+    if (this.imageDataBeforePreview) {
+      this.applyImageData(this.imageDataBeforePreview);
+      this.imageDataBeforePreview = null;
+    }
+  }
+
   private applyAction(action: Action) {
     const style = { ...this.currentStyle, ...action.style };
 
     this.context.lineWidth = style.lineWidth;
     this.context.strokeStyle = style.color;
     this.context.fillStyle = style.color;
+    this.context.lineCap = 'round';
+    this.context.lineJoin = 'round';
 
     action.tool.applyToContext(this.context, action.record, {
       width: this.canvasElement.width,
