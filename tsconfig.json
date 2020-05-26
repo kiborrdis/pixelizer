@@ -5,12 +5,12 @@
       "es6",
       "dom"
     ],
+    "declarationDir": "./dist",
     "noImplicitAny": true,
     "target": "es5",
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "declaration": true,
-    "declarationDir": "./types",
     "esModuleInterop": true
   },
   "include": [

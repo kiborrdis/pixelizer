@@ -1,31 +1,26 @@
 {
-  "name": "pixelizer",
+  "name": "drawery",
   "version": "1.0.0",
   "description": "",
   "main": "dist/bundle.js",
-  "types": "types/main.d.ts",
+  "types": "dist/main.d.ts",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "start": "rollup -c --watch",
-    "lint:fix": "tslint -p . --fix",
-    "lint": "tslint -p ."
+    "start": "rollup -c --watch"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "typescript": "^3.2.4"
-  },
   "devDependencies": {
-    "@types/jest": "^23.3.13",
+    "typescript": "^3.9.3",
+    "@types/jest": "^24.9.0",
     "@types/prettier": "^1.15.2",
-    "jest": "^23.6.0",
+    "jest": "^24.9.0",
     "jest-canvas-mock": "^1.1.1-beta.1",
     "rollup": "^1.1.2",
-    "rollup-plugin-typescript2": "^0.19.2",
+    "rollup-plugin-typescript2": "^0.27.1",
     "rollup-plugin-uglify": "^6.0.2",
-    "ts-jest": "^23.10.5",
-    "tslint": "^5.12.1",
+    "ts-jest": "^26.0.0",
     "uglify-js": "^3.4.9"
   }
 }
