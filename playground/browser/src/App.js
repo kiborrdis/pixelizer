@@ -1,48 +1,78 @@
-import React, { Component } from 'react';
-import { Pixelizer, LineTool, RectangleTool, ActionSerializer, TwoPointRecorder, PointScalarRecorder, NPointRecorder, MultilineTool, BrowserInteractionAdapter } from 'drawery';
-import './App.css';
+import React, { useRef, useEffect } from "react";
+import {
+  Pixelizer,
+  LineTool,
+  RectangleTool,
+  TwoPointRecorder,
+  PointScalarRecorder,
+  NPointRecorder,
+  MultilineTool,
+  BrowserInteractionAdapter,
+} from "drawery";
+import "./App.css";
 
-class App extends Component {
-  tempRef = React.createRef();
+const tools = {
+  rectangle: {
+    recorderCreator: (...args) => new PointScalarRecorder(...args),
+    tool: new RectangleTool(),
+  },
+  line: {
+    recorderCreator: (...args) => new TwoPointRecorder(...args),
+    tool: new LineTool(),
+  },
+  brush: {
+    recorderCreator: (...args) => new NPointRecorder(...args),
+    tool: new MultilineTool(),
+  },
+};
 
-  constructor() {
-    super();
+const App = () => {
+  const containerRef = useRef(null);
+  const draweryRef = useRef(null);
 
-    this.pixelizer = new Pixelizer(new BrowserInteractionAdapter());
-    this.pixelizer.setStyle({
+  useEffect(() => {
+    if (!containerRef.current) {
+      return;
+    }
+    draweryRef.current = new Pixelizer(new BrowserInteractionAdapter());
+
+    draweryRef.current.mountCanvasInDOMElement(containerRef.current);
+    draweryRef.current.setStyle({
       lineWidth: 10,
-      color: '#ff00ff',
-    })
-    this.pixelizer.setConfig({
-      recorderCreator: (...args) => new PointScalarRecorder(...args),
-      tool: new RectangleTool(),
-    })
-    this.pixelizer.addNewActionListener((action) => {
-      console.log(ActionSerializer.serialize(action));
-    })
-  }
+      color: "#ff0000",
+    });
+  }, []);
 
-  revert = () => {
-    this.pixelizer.revertAction();
-  }
+  return (
+    <div className="App">
+      <header className="App-header">
+        <div
+          ref={containerRef}
+          style={{ width: "600px", height: "600px", backgroundColor: "maroon" }}
+        ></div>
+        <div>
+          {Object.keys(tools).map((key) => (
+            <button
+              onClick={() => {
+                draweryRef.current.setConfig(tools[key]);
+              }}
+            >
+              {key}
+            </button>
+          ))}
+        </div>
+        <button onClick={() => {
+          if (!draweryRef.current) {
+            return;
+          }
 
-  componentDidMount() {
-    this.pixelizer.mountCanvasInDOMElement(this.tempRef.current);
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <div ref={this.tempRef} style={{ width: '600px', height: '600px', backgroundColor: 'maroon' }}></div>
-
-          <button onClick={this.revert}>
-            Revert
-          </button>
-        </header>
-      </div>
-    );
-  }
-}
+          draweryRef.current.revertAction();
+        }}>
+          revert
+        </button>
+      </header>
+    </div>
+  );
+};
 
 export default App;
