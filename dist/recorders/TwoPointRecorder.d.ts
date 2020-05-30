@@ -2,18 +2,13 @@ import { InteractionRecorder } from './InteractionRecorder';
 import { InteractionRecord } from './InteractionRecord';
 import { InteractionEvent } from '../InteractionAdapter';
 import { Point } from '../interfaces/Point';
-export declare class TwoPointRecord extends InteractionRecord {
+export interface TwoPointRecord extends InteractionRecord {
     startPoint: Point;
     endPoint: Point;
-    serialize(): {
-        data: {
-            startPoint: Point;
-            endPoint: Point;
-        };
-        type: string;
-    };
 }
-export declare class TwoPointRecorder extends InteractionRecorder {
+export declare const createTwoPointRecord: () => TwoPointRecord;
+export declare const isTwoPointRecord: (record: any) => record is TwoPointRecord;
+export declare class TwoPointRecorder extends InteractionRecorder<TwoPointRecord> {
     private currentRecord;
     pressStart(event: InteractionEvent): void;
     moveDuringPress(event: InteractionEvent): void;

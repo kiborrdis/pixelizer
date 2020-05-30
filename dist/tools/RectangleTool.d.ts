@@ -1,7 +1,8 @@
 import { Tool } from './Tool';
-import { InteractionRecord } from '../recorders/InteractionRecord';
-export declare class RectangleTool extends Tool {
-    applyToContext(context: CanvasRenderingContext2D, record: InteractionRecord): void;
+import { TwoPointRecord } from '../recorders/TwoPointRecorder';
+import { PointScalarRecord } from '../recorders/PointScalarRecorder';
+export declare class RectangleTool extends Tool<TwoPointRecord | PointScalarRecord> {
+    applyToContext(context: CanvasRenderingContext2D, record: TwoPointRecord | PointScalarRecord): void;
     private drawRectBasedOnTwoPoints;
     private drawRectBasedOnPointScalar;
 }
