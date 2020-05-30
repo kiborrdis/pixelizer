@@ -13,7 +13,7 @@ function createAction(): Action<InteractionRecord> {
         tool: new MockTool(),
         record: {},
         style: {
-            color: Math.random().toString(36).substring(7),
+            color: '#f00',
         },
     };
 }
@@ -51,18 +51,10 @@ describe('Canvas', () => {
     });
 
     test('setSize should set size', () => {
-        const prevImageData = canvas.getImageData();
-
         canvas.setSize(200, 300);
 
         expect(canvas.element.width).toBe(200);
         expect(canvas.element.height).toBe(300);
-    });
-
-    test('should return image data with proper data length', () => {
-        canvas.setSize(1, 1);
-
-        expect(canvas.getImageData().data.length).toBe(4);
     });
 
     test('should should put image data to context when applying image data', () => {
@@ -138,7 +130,10 @@ describe('Canvas', () => {
     });
 
     test('should set stroke and fill style after set style', () => {
-        canvas.setStyle({ color: '#ff00ff', lineWidth: 7 });
+        canvas.setStyle({
+            color: '#f0f',
+            lineWidth: 7,
+        });
         actionToPreview.style = {};
 
         canvas.previewAction(actionToPreview);
@@ -147,14 +142,13 @@ describe('Canvas', () => {
             // @ts-ignore
             actionToPreview.tool.applyToContext.mock.calls[0][0];
 
-        expect(passedContext.strokeStyle).toBe('#ff00ff');
-        expect(passedContext.fillStyle).toBe('#ff00ff');
+        expect(passedContext.strokeStyle).toBe('#f0f');
+        expect(passedContext.fillStyle).toBe('#f0f');
         expect(passedContext.lineWidth).toBe(7);
     });
 
     test('should set stroke and fill colors passed with action', () => {
         canvas.setStyle({ color: '#ff00ff', lineWidth: 7 });
-
         canvas.previewAction(actionToPreview);
 
         const passedContext: CanvasRenderingContext2D =

@@ -13,7 +13,7 @@ class MockTool extends Tool<InteractionRecord> {
     public addPoint = jest.fn();
 }
 
-class MockRecorder extends InteractionRecorder {
+class MockRecorder extends InteractionRecorder<InteractionRecord> {
     public testPreview() {
         this.preview({});
     }
