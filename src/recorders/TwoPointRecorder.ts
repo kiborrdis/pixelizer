@@ -3,25 +3,23 @@ import { InteractionRecord } from './InteractionRecord';
 import { InteractionEvent } from '../InteractionAdapter';
 import { Point } from '../interfaces/Point';
 
-export class TwoPointRecord extends InteractionRecord {
-  public startPoint: Point;
-  public endPoint: Point;
-
-  public serialize() {
-    const obj = super.serialize();
-
-    return {
-      ...obj,
-      data: {
-        startPoint: this.startPoint,
-        endPoint: this.endPoint,
-      },
-    };
-  }
+export interface TwoPointRecord extends InteractionRecord {
+  startPoint: Point;
+  endPoint: Point;
 }
 
-export class TwoPointRecorder extends InteractionRecorder {
-  private currentRecord: TwoPointRecord = new TwoPointRecord();
+export const createTwoPointRecord = (): TwoPointRecord => ({
+  startPoint: { x: 0, y: 0 },
+  endPoint: { x: 0, y: 0 },
+});
+
+export const isTwoPointRecord = (record: any): record is TwoPointRecord => (
+  'startPoint' in record &&
+  'endPoint' in record
+);
+
+export class TwoPointRecorder extends InteractionRecorder<TwoPointRecord> {
+  private currentRecord: TwoPointRecord = createTwoPointRecord();
 
   public pressStart(event: InteractionEvent) {
     this.currentRecord.startPoint = event.position;
@@ -38,6 +36,6 @@ export class TwoPointRecorder extends InteractionRecorder {
 
     this.finishRecord(this.currentRecord);
 
-    this.currentRecord = new TwoPointRecord();
+    this.currentRecord = createTwoPointRecord();
   }
 }

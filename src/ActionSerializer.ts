@@ -4,7 +4,6 @@ import { Serializable } from './interfaces/Serializable';
 import { SerializedObject } from './interfaces/SerializedObject';
 import { InteractionRecord } from './recorders/InteractionRecord';
 import * as Tools from './tools/index';
-import * as Records from './recorders/index';
 
 interface StringObj {
   [key: string]: any;
@@ -12,7 +11,7 @@ interface StringObj {
 
 export interface ActionObject {
   tool: SerializedObject;
-  record: SerializedObject;
+  record: InteractionRecord;
   style?: Style;
 }
 
@@ -20,7 +19,7 @@ function serialize(toSerialize: Serializable): SerializedObject {
   return toSerialize.serialize();
 }
 
-function deserializeTool(obj: SerializedObject): Tools.Tool {
+function deserializeTool(obj: SerializedObject): Tools.Tool<InteractionRecord> {
   // @ts-ignore
   const ToolConstructors: StringObj = Tools;
 
@@ -31,53 +30,22 @@ function deserializeTool(obj: SerializedObject): Tools.Tool {
   return new ToolConstructors[obj.type]();
 }
 
-function deserializeRecord(obj: SerializedObject): InteractionRecord {
-  // @ts-ignore
-  const RecordConstructors: StringObj = Records;
+function deserializeRecord(obj: InteractionRecord): InteractionRecord {
+  const record = { ...obj };
 
-  if (!RecordConstructors[obj.type]) {
-    throw new Error(`No record with class '${obj.type}'`);
-  }
-
-  const record = new RecordConstructors[obj.type]();
-
-  switch (obj.type) {
-    case Records.TwoPointRecord.name: {
-      record.startPoint = obj.data.startPoint;
-      record.endPoint = obj.data.endPoint;
-
-      return record;
-    }
-    case Records.NPointRecord.name: {
-      record.points = [...obj.data];
-
-      return record;
-    }
-    case Records.PointScalarRecord.name: {
-      record.point = obj.data.point;
-      record.value = obj.data.value;
-
-      return record;
-    }
-    case Records.InteractionRecord.name: {
-      return record;
-    }
-    default: {
-      throw new Error(`No deserialization strategy for record with class '${obj.type}'`);
-    }
-  }
+  return record;
 }
 
 export class ActionSerializer {
-  public static serialize(action: Action): ActionObject {
+  public static serialize(action: Action<InteractionRecord>): ActionObject {
     return {
       tool: serialize(action.tool),
-      record: serialize(action.record),
+      record: { ...action.record },
       style: action.style ? { ...action.style } : undefined,
     };
   }
 
-  public static deserializeFromObj(actionObj: ActionObject): Action {
+  public static deserializeFromObj(actionObj: ActionObject): Action<InteractionRecord> {
     return {
       tool: deserializeTool(actionObj.tool),
       record: deserializeRecord(actionObj.record),

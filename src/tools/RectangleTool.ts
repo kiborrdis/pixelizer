@@ -1,21 +1,18 @@
 import { Tool } from './Tool';
-import { InteractionRecord } from '../recorders/InteractionRecord';
-import { TwoPointRecord } from '../recorders/TwoPointRecorder';
-import { PointScalarRecord } from '../recorders/PointScalarRecorder';
+import { TwoPointRecord, isTwoPointRecord } from '../recorders/TwoPointRecorder';
+import { PointScalarRecord, isPointScalarRecord } from '../recorders/PointScalarRecorder';
 
-export class RectangleTool extends Tool {
-  public applyToContext(context: CanvasRenderingContext2D, record: InteractionRecord) {
-    if (record instanceof TwoPointRecord) {
+export class RectangleTool extends Tool<TwoPointRecord | PointScalarRecord> {
+  public applyToContext(context: CanvasRenderingContext2D, record: TwoPointRecord | PointScalarRecord) {
+    if (isTwoPointRecord(record)) {
       this.drawRectBasedOnTwoPoints(context, record);
       return;
     }
 
-    if (record instanceof PointScalarRecord) {
+    if (isPointScalarRecord(record)) {
       this.drawRectBasedOnPointScalar(context, record);
       return;
     }
-
-    super.applyToContext(context, record);
   }
 
   private drawRectBasedOnTwoPoints(context: CanvasRenderingContext2D, record: TwoPointRecord) {
@@ -43,4 +40,5 @@ export class RectangleTool extends Tool {
 
     context.stroke(path);
   }
+
 }

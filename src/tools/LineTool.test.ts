@@ -9,10 +9,7 @@ describe('LineAction', () => {
     const startPoint = { x: 10, y: 20 };
     const endPoint = { x: 30, y: 20 };
 
-    const record = new TwoPointRecord();
-
-    record.startPoint = startPoint;
-    record.endPoint = endPoint;
+    const record = { startPoint, endPoint };
 
     const canvas = new Canvas();
 

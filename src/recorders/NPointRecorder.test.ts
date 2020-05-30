@@ -44,7 +44,6 @@ describe('NPointRecorder', () => {
     moveDuringPress(endPoint);
 
     expect(preview).toBeCalledWith({ points: [startPoint, { x: 1, y: 2 }, endPoint] });
-    expect(preview).toBeCalledWith(expect.any(NPointRecord));
   });
 
   test('should call finish on moveStop with array of all points being interacted', () => {
@@ -54,6 +53,5 @@ describe('NPointRecorder', () => {
     pressStop(endPoint);
 
     expect(preview).toBeCalledWith({ points: [startPoint, { x: 1, y: 2 }, { x: 2, y: 1 }, endPoint] });
-    expect(preview).toBeCalledWith(expect.any(NPointRecord));
   });
 });

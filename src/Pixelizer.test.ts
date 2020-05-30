@@ -8,18 +8,18 @@ import { Tool } from './tools/Tool';
 import { InteractionRecorder } from './recorders/InteractionRecorder';
 import { InteractionRecord } from './recorders/InteractionRecord';
 
-class MockTool extends Tool {
+class MockTool extends Tool<InteractionRecord> {
   public applyToContext = jest.fn();
   public addPoint = jest.fn();
 }
 
 class MockRecorder extends InteractionRecorder {
   public testPreview() {
-    this.preview(new InteractionRecord());
+    this.preview({});
   }
 
   public testFinish() {
-    this.finishRecord(new InteractionRecord());
+    this.finishRecord({});
   }
 }
 
@@ -99,9 +99,9 @@ describe('Pixelizer', () => {
 
   test('should apply tools on applyActions', () => {
     const actions = [
-      { tool, record: new InteractionRecord() },
-      { tool, record: new InteractionRecord() },
-      { tool, record: new InteractionRecord() },
+      { tool, record: {} },
+      { tool, record: {} },
+      { tool, record: {} },
     ];
 
     pixelizer.applyActions(actions);

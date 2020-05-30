@@ -3,21 +3,18 @@ import { InteractionRecord } from './InteractionRecord';
 import { InteractionEvent } from '../InteractionAdapter';
 import { Point } from '../interfaces/Point';
 
-export class NPointRecord extends InteractionRecord {
-  public points: Point[] = [];
+export interface NPointRecord extends InteractionRecord {
+  points: Point[];
+};
 
-  public serialize() {
-    const obj = super.serialize();
+export const createNPointRecord = (): NPointRecord => ({  points: [] });
 
-    return {
-      ...obj,
-      data: [ ...this.points ],
-    };
-  }
-}
+export const isNPointRecord = (record: any): record is NPointRecord => (
+  'points' in record
+);
 
-export class NPointRecorder extends InteractionRecorder {
-  private currentRecord: NPointRecord = new NPointRecord();
+export class NPointRecorder extends InteractionRecorder<NPointRecord> {
+  private currentRecord: NPointRecord = createNPointRecord();
 
   public pressStart(event: InteractionEvent) {
     this.currentRecord.points.push({ ...event.position });
@@ -34,6 +31,6 @@ export class NPointRecorder extends InteractionRecorder {
 
     this.finishRecord(this.currentRecord);
 
-    this.currentRecord = new NPointRecord();
+    this.currentRecord = createNPointRecord();
   }
 }

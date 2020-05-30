@@ -3,12 +3,14 @@ import { InteractionRecord } from './recorders/InteractionRecord';
 import { Tool } from './tools/Tool';
 import { Action } from './interfaces/Action';
 
-class MockTool extends Tool {}
+class MockTool extends Tool<InteractionRecord> {
+  applyToContext() {}
+}
 
-function createAction(): Action {
+function createAction(): Action<InteractionRecord> {
   return {
     tool: new MockTool(),
-    record: new InteractionRecord(),
+    record: {},
     style: {
       color: Math.random().toString(36).substring(7),
     },

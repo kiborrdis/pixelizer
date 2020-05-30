@@ -3,10 +3,8 @@ import { Serializable } from '../interfaces/Serializable';
 import { SerializedObject } from '../interfaces/SerializedObject';
 import { CanvasParams } from '../interfaces/CanvasParams';
 
-export abstract class Tool implements Serializable {
-  public applyToContext(context: CanvasRenderingContext2D, record: InteractionRecord, params?: CanvasParams): void {
-    throw new Error(`passed record type is not supported`);
-  }
+export abstract class Tool<R extends InteractionRecord> implements Serializable {
+  public abstract applyToContext(context: CanvasRenderingContext2D, record: R, params?: CanvasParams): void;
 
   public serialize(): SerializedObject {
     return {

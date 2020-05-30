@@ -10,10 +10,10 @@ describe('RectangleTool', () => {
     const startPoint = { x: 10, y: 20 };
     const endPoint = { x: 30, y: 20 };
 
-    const record = new TwoPointRecord();
-
-    record.startPoint = startPoint;
-    record.endPoint = endPoint;
+    const record = {
+      startPoint,
+      endPoint,
+    };
 
     const canvas = new Canvas();
 
@@ -36,9 +36,10 @@ describe('RectangleTool', () => {
     const point = { x: 10, y: 10 };
     const value = 3;
 
-    const record = new PointScalarRecord();
-    record.point = point;
-    record.value = value;
+    const record = {
+      point,
+      value,
+    };
 
     const canvas = new Canvas();
 

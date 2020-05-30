@@ -6,7 +6,7 @@ import { Canvas } from '../Canvas';
 describe('FillTool', () => {
   test('should apply fill rect path with size of canvas based on InteractionRecord', () => {
     const tool = new FillTool();
-    const record = new InteractionRecord();
+    const record = {};
 
     const canvas = new Canvas();
 

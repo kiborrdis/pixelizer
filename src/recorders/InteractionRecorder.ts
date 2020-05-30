@@ -2,23 +2,23 @@ import { InteractionEvent } from '../InteractionAdapter';
 import { InteractionHandler } from '../interfaces/InteractionHandler';
 import { InteractionRecord } from './InteractionRecord';
 
-export abstract class InteractionRecorder implements InteractionHandler {
-  private requestPreview: (record: InteractionRecord) => void;
-  private reportFinishRecord: (record: InteractionRecord) => void;
+export abstract class InteractionRecorder<R extends InteractionRecord> implements InteractionHandler {
+  private requestPreview: (record: R) => void;
+  private reportFinishRecord: (record: R) => void;
 
   constructor(
-    requestPreview: (record: InteractionRecord) => void,
-    reportFinishRecord: (record: InteractionRecord) => void,
+    requestPreview: (record: R) => void,
+    reportFinishRecord: (record: R) => void,
   ) {
     this.requestPreview = requestPreview;
     this.reportFinishRecord = reportFinishRecord;
   }
 
-  protected finishRecord(record: InteractionRecord) {
+  protected finishRecord(record: R) {
     this.reportFinishRecord(record);
   }
 
-  protected preview(record: InteractionRecord) {
+  protected preview(record: R) {
     this.requestPreview(record);
   }
 

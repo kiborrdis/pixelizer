@@ -4,14 +4,14 @@ import { Tool } from './tools/Tool';
 import { Mutation } from './interfaces/Mutation';
 import { Action } from './interfaces/Action';
 
-class MockTool extends Tool {
+class MockTool extends Tool<InteractionRecord> {
   public applyToContext = jest.fn();
 }
 
-function createAction(): Action {
+function createAction(): Action<InteractionRecord> {
   return {
     tool: new MockTool(),
-    record: new InteractionRecord(),
+    record: {},
     style: {
       color: Math.random().toString(36).substring(7),
     },
@@ -31,7 +31,7 @@ function assertMutationActionsWereCalled(mutation: Mutation) {
 
 describe('Canvas', () => {
   let canvas = new Canvas();
-  let actionToPreview: Action;
+  let actionToPreview: Action<InteractionRecord>;
 
   beforeEach(() => {
     canvas = new Canvas();

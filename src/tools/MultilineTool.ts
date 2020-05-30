@@ -2,14 +2,9 @@ import { Tool } from './Tool';
 import { InteractionRecord } from '../recorders/InteractionRecord';
 import { NPointRecord } from '../recorders/NPointRecorder';
 
-export class MultilineTool extends Tool {
-  public applyToContext(context: CanvasRenderingContext2D, record: InteractionRecord) {
-    if (record instanceof NPointRecord) {
-      this.drawLineBasedOnArrayOfPoints(context, record);
-      return;
-    }
-
-    super.applyToContext(context, record);
+export class MultilineTool extends Tool<NPointRecord> {
+  public applyToContext(context: CanvasRenderingContext2D, record: NPointRecord) {
+    this.drawLineBasedOnArrayOfPoints(context, record);
   }
 
   private drawLineBasedOnArrayOfPoints(context: CanvasRenderingContext2D, record: NPointRecord) {

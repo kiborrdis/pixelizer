@@ -14,9 +14,7 @@ describe('MultilineTool', () => {
       { x: 30, y: 20 },
     ];
 
-    const record = new NPointRecord();
-    record.points = points;
-
+    const record = { points };
     const canvas = new Canvas();
 
     tool.applyToContext(canvas.context, record);

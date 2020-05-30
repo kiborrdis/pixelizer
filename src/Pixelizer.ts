@@ -14,22 +14,22 @@ import { Action } from './interfaces/Action';
 import { History } from './History';
 import { Mutation } from './interfaces/Mutation';
 
-export interface PixelizerConfig {
-  tool?: Tool;
+export interface PixelizerConfig<R extends InteractionRecord> {
+  tool?: Tool<R>;
   recorderCreator?: (
     preview: (record: InteractionRecord) => void,
     finish: (record: InteractionRecord) => void,
-  ) => InteractionRecorder;
+  ) => InteractionRecorder<R>;
 }
 
 export class Pixelizer {
   private connector: InteractionConnector;
-  private currentRecorder: InteractionRecorder;
-  private currentTool: Tool;
+  private currentRecorder: InteractionRecorder<InteractionRecord>;
+  private currentTool: Tool<InteractionRecord>;
 
   private adapter: InteractionAdapter;
   private canvas: Canvas;
-  private newActionListener: (action: Action) => void;
+  private newActionListener: (action: Action<InteractionRecord>) => void;
   private style: Style;
   private history: History;
   private interactionsAllowed: boolean = true;
@@ -51,14 +51,14 @@ export class Pixelizer {
 
     const mutation = this.history.add({
       tool: new FillTool(),
-      record: new InteractionRecord(),
+      record: {},
       style: { color: '#ffffff' },
     });
 
     this.applyMutation(mutation);
   }
 
-  public setConfig(config: PixelizerConfig) {
+  public setConfig<R extends InteractionRecord>(config: PixelizerConfig<R>) {
     if (config.recorderCreator) {
       this.currentRecorder = config.recorderCreator(this.preview, this.finishAction);
       this.connector.setIteractionHandler(this.currentRecorder);
@@ -116,7 +116,7 @@ export class Pixelizer {
   public clear() {
     const fill = {
       tool: new FillTool(),
-      record: new InteractionRecord(),
+      record: {},
       style: { color: '#ffffff' },
     };
 
@@ -126,13 +126,13 @@ export class Pixelizer {
     this.history.add(fill);
   }
 
-  public applyActions(actions: Action[] = []) {
+  public applyActions(actions: Action<InteractionRecord>[] = []) {
     actions.forEach((action) => {
       this.applyMutation(this.history.add(action));
     });
   }
 
-  public addNewActionListener(listener: (action: Action) => void) {
+  public addNewActionListener(listener: (action: Action<InteractionRecord>) => void) {
     this.newActionListener = listener;
   }
 

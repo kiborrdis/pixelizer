@@ -6,25 +6,20 @@ import { Point } from '../interfaces/Point';
 const MAX_SCALAR_VALUE = 100;
 const MIN_SCALAR_VALUE = 1;
 
-export class PointScalarRecord extends InteractionRecord {
-  public point: Point;
-  public value: number = 3;
-
-  public serialize() {
-    const obj = super.serialize();
-
-    return {
-      ...obj,
-      data: {
-        point: this.point,
-        value: this.value,
-      },
-    };
-  }
+export interface PointScalarRecord extends InteractionRecord {
+  point: Point;
+  value: number;
 }
 
-export class PointScalarRecorder extends InteractionRecorder {
-  private currentRecord: PointScalarRecord = new PointScalarRecord();
+export const createPointScalarRecord = (): PointScalarRecord => ({ point: { x: 0, y: 0 }, value: 3 })
+
+export const isPointScalarRecord = (record: any): record is PointScalarRecord => (
+  'value' in record &&
+  'point' in record
+);
+
+export class PointScalarRecorder extends InteractionRecorder<PointScalarRecord> {
+  private currentRecord: PointScalarRecord = createPointScalarRecord();
   private lastValue: number = 3;
 
   public move(event: InteractionEvent) {
@@ -52,7 +47,7 @@ export class PointScalarRecorder extends InteractionRecorder {
 
     this.finishRecord(this.currentRecord);
 
-    this.currentRecord = new PointScalarRecord();
+    this.currentRecord = createPointScalarRecord();
     this.currentRecord.value = this.lastValue;
   }
 }
