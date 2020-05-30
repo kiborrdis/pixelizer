@@ -6,52 +6,56 @@ import { InteractionRecord } from './recorders/InteractionRecord';
 import * as Tools from './tools/index';
 
 interface StringObj {
-  [key: string]: any;
+    [key: string]: any;
 }
 
 export interface ActionObject {
-  tool: SerializedObject;
-  record: InteractionRecord;
-  style?: Style;
+    tool: SerializedObject;
+    record: InteractionRecord;
+    style?: Style;
 }
 
 function serialize(toSerialize: Serializable): SerializedObject {
-  return toSerialize.serialize();
+    return toSerialize.serialize();
 }
 
 function deserializeTool(obj: SerializedObject): Tools.Tool<InteractionRecord> {
-  // @ts-ignore
-  const ToolConstructors: StringObj = Tools;
+    // @ts-ignore
+    const ToolConstructors: StringObj = Tools;
 
-  if (!ToolConstructors[obj.type]) {
-    throw new Error(`No tool with class '${obj.type}'`);
-  }
+    if (!ToolConstructors[obj.type]) {
+        throw new Error(`No tool with class '${obj.type}'`);
+    }
 
-  return new ToolConstructors[obj.type]();
+    return new ToolConstructors[obj.type]();
 }
 
 function deserializeRecord(obj: InteractionRecord): InteractionRecord {
-  const record = { ...obj };
+    const record = { ...obj };
 
-  return record;
+    return record;
 }
 
 export class ActionSerializer {
-  public static serialize(action: Action<InteractionRecord>): ActionObject {
-    return {
-      tool: serialize(action.tool),
-      record: { ...action.record },
-      style: action.style ? { ...action.style } : undefined,
-    };
-  }
+    public static serialize(action: Action<InteractionRecord>): ActionObject {
+        return {
+            tool: serialize(action.tool),
+            record: { ...action.record },
+            style: action.style ? { ...action.style } : undefined,
+        };
+    }
 
-  public static deserializeFromObj(actionObj: ActionObject): Action<InteractionRecord> {
-    return {
-      tool: deserializeTool(actionObj.tool),
-      record: deserializeRecord(actionObj.record),
-      style: actionObj.style ? {
-        ...actionObj.style,
-      } : undefined,
-    };
-  }
+    public static deserializeFromObj(
+        actionObj: ActionObject,
+    ): Action<InteractionRecord> {
+        return {
+            tool: deserializeTool(actionObj.tool),
+            record: deserializeRecord(actionObj.record),
+            style: actionObj.style
+                ? {
+                      ...actionObj.style,
+                  }
+                : undefined,
+        };
+    }
 }

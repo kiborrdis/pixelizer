@@ -1,4 +1,4 @@
 export interface Style {
-  color?: string;
-  lineWidth?: number;
+    color?: string;
+    lineWidth?: number;
 }

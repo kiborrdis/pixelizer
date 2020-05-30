@@ -1,7 +1,7 @@
 import {
-  InteractionAdapter,
-  InteractionEvent,
-  InteractionEventType,
+    InteractionAdapter,
+    InteractionEvent,
+    InteractionEventType,
 } from './InteractionAdapter';
 import { InteractionConnector } from './InteractionConnector';
 import { InteractionRecorder } from './recorders/InteractionRecorder';
@@ -15,134 +15,141 @@ import { History } from './History';
 import { Mutation } from './interfaces/Mutation';
 
 export interface PixelizerConfig<R extends InteractionRecord> {
-  tool?: Tool<R>;
-  recorderCreator?: (
-    preview: (record: InteractionRecord) => void,
-    finish: (record: InteractionRecord) => void,
-  ) => InteractionRecorder<R>;
+    tool?: Tool<R>;
+    recorderCreator?: (
+        preview: (record: InteractionRecord) => void,
+        finish: (record: InteractionRecord) => void,
+    ) => InteractionRecorder<R>;
 }
 
 export class Pixelizer {
-  private connector: InteractionConnector;
-  private currentRecorder: InteractionRecorder<InteractionRecord>;
-  private currentTool: Tool<InteractionRecord>;
+    private connector: InteractionConnector;
+    private currentRecorder: InteractionRecorder<InteractionRecord>;
+    private currentTool: Tool<InteractionRecord>;
 
-  private adapter: InteractionAdapter;
-  private canvas: Canvas;
-  private newActionListener: (action: Action<InteractionRecord>) => void;
-  private style: Style;
-  private history: History;
-  private interactionsAllowed: boolean = true;
+    private adapter: InteractionAdapter;
+    private canvas: Canvas;
+    private newActionListener: (action: Action<InteractionRecord>) => void;
+    private style: Style;
+    private history: History;
+    private interactionsAllowed: boolean = true;
 
-  constructor(adapter: InteractionAdapter) {
-    this.adapter = adapter;
-    this.connector = new InteractionConnector(this.adapter);
-    this.canvas = new Canvas();
-    this.history = new History(this.canvas.getImageData());
-  }
-
-  public mountCanvasInDOMElement(element: HTMLElement) {
-    element.appendChild(this.canvas.element);
-
-    this.canvas.setSize(this.canvas.element.scrollWidth, this.canvas.element.scrollHeight);
-    this.history = new History(this.canvas.getImageData());
-
-    this.adapter.setInteractionElement(this.canvas.element);
-
-    const mutation = this.history.add({
-      tool: new FillTool(),
-      record: {},
-      style: { color: '#ffffff' },
-    });
-
-    this.applyMutation(mutation);
-  }
-
-  public setConfig<R extends InteractionRecord>(config: PixelizerConfig<R>) {
-    if (config.recorderCreator) {
-      this.currentRecorder = config.recorderCreator(this.preview, this.finishAction);
-      this.connector.setIteractionHandler(this.currentRecorder);
+    constructor(adapter: InteractionAdapter) {
+        this.adapter = adapter;
+        this.connector = new InteractionConnector(this.adapter);
+        this.canvas = new Canvas();
+        this.history = new History(this.canvas.getImageData());
     }
 
-    if (config.tool) {
-      this.currentTool = config.tool;
-    }
-  }
+    public mountCanvasInDOMElement(element: HTMLElement) {
+        element.appendChild(this.canvas.element);
 
-  public setStyle(style: Style) {
-    this.style = style;
+        this.canvas.setSize(
+            this.canvas.element.scrollWidth,
+            this.canvas.element.scrollHeight,
+        );
+        this.history = new History(this.canvas.getImageData());
 
-    this.canvas.setStyle(style);
-  }
+        this.adapter.setInteractionElement(this.canvas.element);
 
-  private preview = (record: InteractionRecord) => {
-    if (!this.interactionsAllowed) {
-      return;
-    }
+        const mutation = this.history.add({
+            tool: new FillTool(),
+            record: {},
+            style: { color: '#ffffff' },
+        });
 
-    if (this.currentTool) {
-      this.canvas.previewAction({
-        tool: this.currentTool,
-        record,
-        style: { ...this.style },
-      });
-    }
-  }
-
-  private finishAction = (record: InteractionRecord) => {
-    if (!this.interactionsAllowed) {
-      return;
+        this.applyMutation(mutation);
     }
 
-    if (this.currentTool) {
-      const action = {
-        tool: this.currentTool,
-        record,
-        style: { ...this.style },
-      };
-      const mutation = this.history.add(action);
+    public setConfig<R extends InteractionRecord>(config: PixelizerConfig<R>) {
+        if (config.recorderCreator) {
+            this.currentRecorder = config.recorderCreator(
+                this.preview,
+                this.finishAction,
+            );
+            this.connector.setIteractionHandler(this.currentRecorder);
+        }
 
-      this.applyMutation(mutation);
-      if (this.newActionListener) {
-        this.newActionListener(action);
-      }
+        if (config.tool) {
+            this.currentTool = config.tool;
+        }
     }
-  }
 
-  public enableInteractions(value: boolean) {
-    this.interactionsAllowed = value;
-  }
+    public setStyle(style: Style) {
+        this.style = style;
 
-  public clear() {
-    const fill = {
-      tool: new FillTool(),
-      record: {},
-      style: { color: '#ffffff' },
+        this.canvas.setStyle(style);
+    }
+
+    private preview = (record: InteractionRecord) => {
+        if (!this.interactionsAllowed) {
+            return;
+        }
+
+        if (this.currentTool) {
+            this.canvas.previewAction({
+                tool: this.currentTool,
+                record,
+                style: { ...this.style },
+            });
+        }
     };
 
-    this.applyMutation(this.history.add(fill));
+    private finishAction = (record: InteractionRecord) => {
+        if (!this.interactionsAllowed) {
+            return;
+        }
 
-    this.history = new History(this.canvas.getImageData());
-    this.history.add(fill);
-  }
+        if (this.currentTool) {
+            const action = {
+                tool: this.currentTool,
+                record,
+                style: { ...this.style },
+            };
+            const mutation = this.history.add(action);
 
-  public applyActions(actions: Action<InteractionRecord>[] = []) {
-    actions.forEach((action) => {
-      this.applyMutation(this.history.add(action));
-    });
-  }
+            this.applyMutation(mutation);
+            if (this.newActionListener) {
+                this.newActionListener(action);
+            }
+        }
+    };
 
-  public addNewActionListener(listener: (action: Action<InteractionRecord>) => void) {
-    this.newActionListener = listener;
-  }
+    public enableInteractions(value: boolean) {
+        this.interactionsAllowed = value;
+    }
 
-  public revertAction() {
-    const mutation = this.history.back();
-    this.applyMutation(mutation);
+    public clear() {
+        const fill = {
+            tool: new FillTool(),
+            record: {},
+            style: { color: '#ffffff' },
+        };
 
-  }
+        this.applyMutation(this.history.add(fill));
 
-  private applyMutation(mutation: Mutation) {
-    this.canvas.applyMutation(mutation);
-  }
+        this.history = new History(this.canvas.getImageData());
+        this.history.add(fill);
+    }
+
+    public applyActions(actions: Action<InteractionRecord>[] = []) {
+        actions.forEach((action) => {
+            this.applyMutation(this.history.add(action));
+        });
+    }
+
+    public addNewActionListener(
+        listener: (action: Action<InteractionRecord>) => void,
+    ) {
+        this.newActionListener = listener;
+    }
+
+    public revertAction() {
+        const mutation = this.history.back();
+        this.applyMutation(mutation);
+    }
+
+    private applyMutation(mutation: Mutation) {
+        this.canvas.applyMutation(mutation);
+    }
 }

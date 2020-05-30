@@ -3,7 +3,7 @@ import { Tool } from '../tools/Tool';
 import { Style } from './Style';
 
 export interface Action<R extends InteractionRecord> {
-  tool: Tool<R>;
-  record: R;
-  style?: Style;
+    tool: Tool<R>;
+    record: R;
+    style?: Style;
 }

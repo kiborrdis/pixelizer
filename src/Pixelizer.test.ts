@@ -1,7 +1,7 @@
 import {
-  InteractionAdapter,
-  InteractionEventType,
-  InteractionEvent,
+    InteractionAdapter,
+    InteractionEventType,
+    InteractionEvent,
 } from './InteractionAdapter';
 import { Pixelizer } from './Pixelizer';
 import { Tool } from './tools/Tool';
@@ -9,103 +9,108 @@ import { InteractionRecorder } from './recorders/InteractionRecorder';
 import { InteractionRecord } from './recorders/InteractionRecord';
 
 class MockTool extends Tool<InteractionRecord> {
-  public applyToContext = jest.fn();
-  public addPoint = jest.fn();
+    public applyToContext = jest.fn();
+    public addPoint = jest.fn();
 }
 
 class MockRecorder extends InteractionRecorder {
-  public testPreview() {
-    this.preview({});
-  }
+    public testPreview() {
+        this.preview({});
+    }
 
-  public testFinish() {
-    this.finishRecord({});
-  }
+    public testFinish() {
+        this.finishRecord({});
+    }
 }
 
 class MockAdapter extends InteractionAdapter {
-  public element: HTMLElement;
+    public element: HTMLElement;
 
-  public addInteractionListener = jest.fn(
-    (type: InteractionEventType, callback: (e: InteractionEvent) => void) => {
-      super.addInteractionListener(type, callback);
-    },
-  );
+    public addInteractionListener = jest.fn(
+        (
+            type: InteractionEventType,
+            callback: (e: InteractionEvent) => void,
+        ) => {
+            super.addInteractionListener(type, callback);
+        },
+    );
 
-  public setInteractionElement(element: HTMLElement) {
-    this.element = element;
-  }
+    public setInteractionElement(element: HTMLElement) {
+        this.element = element;
+    }
 }
 
 test('Pixelizer should succesfully be creared', () => {
-  const adapter = new Pixelizer(new MockAdapter());
+    const adapter = new Pixelizer(new MockAdapter());
 });
 
 describe('Pixelizer', () => {
-  let pixelizer: Pixelizer;
-  let adapter: MockAdapter;
-  let tool: MockTool;
-  let recorder: MockRecorder;
+    let pixelizer: Pixelizer;
+    let adapter: MockAdapter;
+    let tool: MockTool;
+    let recorder: MockRecorder;
 
-  beforeEach(() => {
-    adapter = new MockAdapter();
-    pixelizer = new Pixelizer(adapter);
-    tool = new MockTool();
+    beforeEach(() => {
+        adapter = new MockAdapter();
+        pixelizer = new Pixelizer(adapter);
+        tool = new MockTool();
 
-    pixelizer.setConfig({
-      recorderCreator: (...args) => {
-        recorder = new MockRecorder(...args);
+        pixelizer.setConfig({
+            recorderCreator: (...args) => {
+                recorder = new MockRecorder(...args);
 
-        return recorder;
-      },
-      tool,
+                return recorder;
+            },
+            tool,
+        });
     });
-  });
 
-  test('should succesfully mount canvas into element', () => {
-    const element = document.createElement('div');
+    test('should succesfully mount canvas into element', () => {
+        const element = document.createElement('div');
 
-    pixelizer.mountCanvasInDOMElement(element);
+        pixelizer.mountCanvasInDOMElement(element);
 
-    expect(element.children[0]).toBeDefined();
-    expect(adapter.element).toBe(element.children[0]);
-  });
+        expect(element.children[0]).toBeDefined();
+        expect(adapter.element).toBe(element.children[0]);
+    });
 
-  test('should listen for interaction events', () => {
-    expect(adapter.addInteractionListener).toBeCalledTimes(Object.keys(InteractionEventType).length / 2);
-  });
+    test('should listen for interaction events', () => {
+        expect(adapter.addInteractionListener).toBeCalledTimes(
+            Object.keys(InteractionEventType).length / 2,
+        );
+    });
 
-  test('should preview tool after preview request from recorder', () => {
-    recorder.testPreview();
+    test('should preview tool after preview request from recorder', () => {
+        recorder.testPreview();
 
-    expect(tool.applyToContext).toBeCalled();
-  });
+        expect(tool.applyToContext).toBeCalled();
+    });
 
-  test('should apply tool after finish record from recorder', () => {
-    recorder.testFinish();
+    test('should apply tool after finish record from recorder', () => {
+        recorder.testFinish();
 
-    expect(tool.applyToContext).toBeCalled();
-  });
+        expect(tool.applyToContext).toBeCalled();
+    });
 
-  test('should trigger new action callback when record has finished', () => {
-    const newActionCallback = jest.fn();
+    test('should trigger new action callback when record has finished', () => {
+        const newActionCallback = jest.fn();
 
-    pixelizer.addNewActionListener(newActionCallback);
+        pixelizer.addNewActionListener(newActionCallback);
 
-    recorder.testFinish();
+        recorder.testFinish();
 
-    expect(newActionCallback).toBeCalled();
-  });
+        expect(newActionCallback).toBeCalled();
+    });
 
-  test('should apply tools on applyActions', () => {
-    const actions = [
-      { tool, record: {} },
-      { tool, record: {} },
-      { tool, record: {} },
-    ];
+    test('should apply tools on applyActions', () => {
+        const actions = [
+            { tool, record: {} },
+            { tool, record: {} },
+            { tool, record: {} },
+        ];
 
-    pixelizer.applyActions(actions);
+        pixelizer.applyActions(actions);
 
-    expect(tool.applyToContext).toBeCalledTimes(actions.length);
-  });
+        expect(tool.applyToContext).toBeCalledTimes(actions.length);
+    });
 });

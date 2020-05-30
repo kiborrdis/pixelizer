@@ -4,33 +4,32 @@ import { InteractionEvent } from '../InteractionAdapter';
 import { Point } from '../interfaces/Point';
 
 export interface NPointRecord extends InteractionRecord {
-  points: Point[];
-};
+    points: Point[];
+}
 
-export const createNPointRecord = (): NPointRecord => ({  points: [] });
+export const createNPointRecord = (): NPointRecord => ({ points: [] });
 
-export const isNPointRecord = (record: any): record is NPointRecord => (
-  'points' in record
-);
+export const isNPointRecord = (record: any): record is NPointRecord =>
+    'points' in record;
 
 export class NPointRecorder extends InteractionRecorder<NPointRecord> {
-  private currentRecord: NPointRecord = createNPointRecord();
+    private currentRecord: NPointRecord = createNPointRecord();
 
-  public pressStart(event: InteractionEvent) {
-    this.currentRecord.points.push({ ...event.position });
-  }
+    public pressStart(event: InteractionEvent) {
+        this.currentRecord.points.push({ ...event.position });
+    }
 
-  public moveDuringPress(event: InteractionEvent) {
-    this.currentRecord.points.push({ ...event.position });
+    public moveDuringPress(event: InteractionEvent) {
+        this.currentRecord.points.push({ ...event.position });
 
-    this.preview(this.currentRecord);
-  }
+        this.preview(this.currentRecord);
+    }
 
-  public pressStop(event: InteractionEvent) {
-    this.currentRecord.points.push({ ...event.position });
+    public pressStop(event: InteractionEvent) {
+        this.currentRecord.points.push({ ...event.position });
 
-    this.finishRecord(this.currentRecord);
+        this.finishRecord(this.currentRecord);
 
-    this.currentRecord = createNPointRecord();
-  }
+        this.currentRecord = createNPointRecord();
+    }
 }

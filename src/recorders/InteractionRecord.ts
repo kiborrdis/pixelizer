@@ -1,3 +1,1 @@
-export interface InteractionRecord extends Object {
-
-}
+export interface InteractionRecord extends Object {}
