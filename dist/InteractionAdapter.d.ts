@@ -13,6 +13,7 @@ export interface InteractionEvent {
     type: InteractionEventType;
     id?: string;
     position?: Point;
+    pressure?: number;
 }
 export declare abstract class InteractionAdapter {
     private listeners;
