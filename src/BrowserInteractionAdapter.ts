@@ -12,15 +12,16 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
         this.element = element;
         this.elementRect = element.getBoundingClientRect();
 
-        element.addEventListener('mousedown', this.handleMouseDown);
-        element.addEventListener('mouseup', this.handleInteractionStop);
-        element.addEventListener('mouseleave', this.handleInteractionStop);
-        element.addEventListener('mousemove', this.handleMouseMove);
+        element.addEventListener('pointerdown', this.handleMouseDown);
+        element.addEventListener('pointerup', this.handleInteractionStop);
+        element.addEventListener('pointerout', this.handleInteractionStop);
+        element.addEventListener('pointermove', this.handleMouseMove);
         element.addEventListener('click', this.handleClick);
         element.addEventListener('wheel', this.handleWheel);
     }
 
-    private handleMouseDown = (event: MouseEvent) => {
+    private handleMouseDown = (event: PointerEvent) => {
+        event.preventDefault();
         this.emitInteractionEvent(
             this.transformMouseEventToInteractionEvent(
                 InteractionEventType.PressStart,
@@ -31,7 +32,8 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
         this.interactionStarted = true;
     };
 
-    private handleInteractionStop = (event: MouseEvent) => {
+    private handleInteractionStop = (event: PointerEvent) => {
+        event.preventDefault();
         if (this.interactionStarted) {
             this.emitInteractionEvent(
                 this.transformMouseEventToInteractionEvent(
@@ -40,11 +42,11 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
                 ),
             );
         }
-
         this.interactionStarted = false;
     };
 
-    private handleMouseMove = (event: MouseEvent) => {
+    private handleMouseMove = (event: PointerEvent) => {
+        event.preventDefault();
         if (this.interactionStarted) {
             this.emitInteractionEvent(
                 this.transformMouseEventToInteractionEvent(
@@ -62,7 +64,7 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
         }
     };
 
-    private handleClick = (event: MouseEvent) => {
+    private handleClick = (event: PointerEvent) => {
         this.emitInteractionEvent(
             this.transformMouseEventToInteractionEvent(
                 InteractionEventType.Press,
@@ -89,7 +91,7 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
 
     private transformMouseEventToInteractionEvent(
         type: InteractionEventType,
-        event: MouseEvent,
+        event: PointerEvent,
     ) {
         this.elementRect = this.element.getBoundingClientRect();
         const offsetX = event.clientX - this.elementRect.left;
@@ -99,6 +101,7 @@ export class BrowserInteractionAdapter extends InteractionAdapter {
             position: { x: Math.floor(offsetX), y: Math.floor(offsetY) },
             id: '0',
             type,
+            pressure: event.pressure,
         };
     }
 }

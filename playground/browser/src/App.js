@@ -5,7 +5,7 @@ import {
     RectangleTool,
     TwoPointRecorder,
     PointScalarRecorder,
-    NPointRecorder,
+    NPressurePointsRecorder,
     MultilineTool,
     BrowserInteractionAdapter,
 } from 'drawery';
@@ -21,7 +21,7 @@ const tools = {
         tool: new LineTool(),
     },
     brush: {
-        recorderCreator: (...args) => new NPointRecorder(...args),
+        recorderCreator: (...args) => new NPressurePointsRecorder(...args),
         tool: new MultilineTool(),
     },
 };
@@ -41,6 +41,7 @@ const App = () => {
             lineWidth: 10,
             color: '#ff0000',
         });
+        draweryRef.current.setConfig(tools.brush);
     }, []);
 
     return (

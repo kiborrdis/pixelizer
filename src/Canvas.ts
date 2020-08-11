@@ -20,6 +20,7 @@ export class Canvas {
 
         this.canvasElement.style.width = '100%';
         this.canvasElement.style.height = '100%';
+        this.canvasElement.style.touchAction = 'none';
 
         this.canvasContext = this.canvasElement.getContext('2d');
 
@@ -82,6 +83,7 @@ export class Canvas {
         action.tool.applyToContext(this.context, action.record, {
             width: this.canvasElement.width,
             height: this.canvasElement.height,
+            baseLineWidth: style.lineWidth,
         });
     }
 
